@@ -1,121 +1,52 @@
-from typing import List
+from fixtures import LoadTests
+from managers import TestManager, UserTestManager
+from db import session, Test
+
+'''Реалізувати систему перевірки знань, що підтримує 6-10 різних видів тестових питань
+(введення відповіді, часткове співпадіння, вибір відповідей з переліку, шкала оцінки,
+встановлення відповідностей та ін.). Надати можливість створювати сценарії тестів та
+запускати процес проходження тестів на основі різних типів питань (передбачити
+можливість, коли результати відповідей впливають складність та тематику наступних
+питань). Створити кілька тестів та реалізувати процес проходження тестів на оцінку.
+Додати режим адміністратора для створення та збереження тестів. Передбачити
+обробку статистики по усім збереженим результатам окремого тесту (середній бал,
+розподіл оцінок, найбільш складні питання тощо).'''
 
 
-class Question:
-    '''Представляє окреме питання в тесті з можливими відповідями.'''
+if __name__ == "__main__":
+    LoadTests()
 
-    def __init__(self, question_text: str, answers: list):
-        self.question_text = question_text
-        self.answers = answers
+    while True:
+        print('Оберіть тест:')
+        for i, test in enumerate(TestManager.get_tests(), start=1):
+            print(f"{test.id}. {test}")
+        choice = int(input("Оберіть номер тесту: "))
+        break
 
-    def add_answer(self, answer):
-        '''Додавання відповіді до питання.'''
-        pass
+    test = session.query(Test).filter_by(id=choice).first()
 
-    def remove_answer(self, answer):
-        '''Видалення відповіді з питання.'''
-        pass
+    user = UserTestManager.start_test(1, test.id)
+    if user:
+        print(f"Начинаем тест '{test.name}'")
+        for question in test.questions:
+            print(f"Вопрос: {question.text}")
+            UserTestManager.get_user_choice(
+                [answer.text for answer in question.answers],
+                [answer.is_correct for answer in question.answers],
+                user)
 
-    def get_answers(self):  # Возможно сделать геттером через свойство @property
-        '''Отримання списку відповідей на питання.'''
-        pass
+        user = UserTestManager.finish_test(user.id)
+        if user:
+            print(f"Тест завершено. Ваш результат: {user.score}")
+            print(f"Час початку: {user.start_time}")
+            print(f"Час завершення: {user.end_time}")
+            print(f"Загальний час проходження тесту {user.end_time - user.start_time}")
+        else:
+            print("Ошибка при завершении теста")
+    else:
+        print("Ошибка при начале теста")
 
-    def set_correct_answer(self, index):  # Возможно сделать геттером через свойство @property
-        pass
-
-    def get_correct_answer(self):  # idk if we need it
-        '''Отримання індексу вірної відповіді.'''
-        pass
-
-    def get_question_text(self):
-        '''Отримання тексту питання.'''
-        pass
-
-
-class Test:
-    '''Представляє тест з питаннями та відповідями.'''
-
-    def __init__(self, test_name: str, questions: List[Question], difficulty: str):
-        self.test_name = test_name
-        self.questions = questions
-        self.difficulty = difficulty
-
-    def add_question(self, question):
-        '''Додавання питання до тесту.'''
-        pass
-
-    def remove_question(self, question):
-        '''Видалення питання з тесту.'''
-        pass
-
-    def get_questions(self):  # Возможно сделать геттером через свойство @property
-        '''Отримання списку питань тесту.'''
-        pass
-
-    def set_difficulty(self, difficulty):  # Возможно сделать геттером через свойство @property
-        '''Встановлення рівня складності тесту.'''
-        pass
-
-    def get_difficulty(self):  # Возможно сделать геттером через свойство @property
-        '''Отримання рівня складності тесту.'''
-        pass
-
-    def get_test_name(self):  # Возможно сделать геттером через свойство @property
-        '''Отримання назви тесту.'''
-        pass
+    session.close()
 
 
-class TestResult:
-    '''Представляє результат проходження тесту.'''
 
-    def __init__(self, test, user, score):
-        self.__test = test
-        self.__user = user
-        self.__score = score
-
-    @property
-    def test(self):
-        return self.__test
-
-    @property
-    def user(self):
-        return self.__user
-
-    @property
-    def score(self):
-        return self.__score
-
-
-class User:
-    '''Представляє користувача системи.'''
-
-    def __init__(self, username: str, email :str, test_results: TestResult):
-        self.username = username
-        self.email = email
-        self.test_results = test_results
-
-    def take_test(self, test):
-        ''' Проходження тесту та збереження результату.'''
-        pass
-
-    def get_test_results(self):  # Возможно сделать геттером через свойство @property
-        '''Отримання списку результатів тестів користувача.'''
-        pass
-
-    def get_username(self):  # Возможно сделать геттером через свойство @property
-        '''Отримання імені користувача.'''
-        pass
-
-    def get_email(self):  # Возможно сделать геттером через свойство @property
-        '''Отримання адреси електронної пошти користувача.'''
-        pass
-
-
-class Manager:
-    '''Клас фасад'''
-
-    def __init__(self):
-        pass
-
-class Interface:
-    pass
