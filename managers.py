@@ -2,7 +2,7 @@ from db import session, Test, Question, Answer, User
 from datetime import datetime
 
 
-class TestManager:
+class AdminTestManager:
     @staticmethod
     def create_test(name, description, questions_data):
         test = Test(name=name, description=description)
@@ -20,13 +20,6 @@ class TestManager:
 
         session.commit()
         return test
-
-    @staticmethod
-    def get_test(test_id):
-        try:
-            return session.query(Test).filter_by(id=test_id).first()
-        except Exception:
-            print('Такого тесту не існує')
 
     @staticmethod
     def get_tests():
@@ -66,7 +59,7 @@ class UserTestManager:
         return None
 
     @staticmethod
-    def get_user_choice(options, options_check, user):
+    def get_user_choice_by_options(options, options_check, user):
         for i, option in enumerate(options, start=1):
             print(f"{i}. {option}")
 
@@ -82,5 +75,20 @@ class UserTestManager:
                     print("Будь ласка, оберіть правильный номер.")
             except ValueError:
                 print("Будь ласка, введіть номер відповіді.")
+
+    @staticmethod
+    def get_user_choice(option_check, user):
+        while True:
+            try:
+                choice = input("Напишіть відповідь: ")
+                if option_check[0].lower() == choice.lower():
+                    user.score += 1
+                    session.commit()
+                    return choice
+            except ValueError:
+                print("Будь ласка, введіть номер відповіді.")
+
+
+
 
 

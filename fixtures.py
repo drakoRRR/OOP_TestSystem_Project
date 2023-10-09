@@ -1,4 +1,4 @@
-from managers import TestManager
+from managers import AdminTestManager
 
 
 class LoadTests:
@@ -15,8 +15,8 @@ class LoadTests:
         ]
 
         test_name = "Загальні знання про Україну"
-        if not TestManager.test_exists(test_name):
-            test1 = TestManager.create_test(test_name,
+        if not AdminTestManager.test_exists(test_name):
+            test1 = AdminTestManager.create_test(test_name,
                                             "Тест на знання загальних фактів про Україну",
                                             test_data1)
 
@@ -34,8 +34,8 @@ class LoadTests:
         ]
 
         test_name = "Тарас Шевченко"
-        if not TestManager.test_exists(test_name):
-            test2 = TestManager.create_test(test_name,
+        if not AdminTestManager.test_exists(test_name):
+            test2 = AdminTestManager.create_test(test_name,
                                             "Тест на знання фактів з життя та творчості Тараса Шевченка",
                                             test_data2)
 
@@ -54,7 +54,26 @@ class LoadTests:
         ]
 
         test_name = "Іван Франко"
-        if not TestManager.test_exists(test_name):
-            test3 = TestManager.create_test(test_name,
+        if not AdminTestManager.test_exists(test_name):
+            test3 = AdminTestManager.create_test(test_name,
                                             "Тест на знання фактів з життя та творчості Івана Франка",
                                             test_data3)
+
+        test_data4 = [
+            ("Хто був першим Гетьманом України?",
+             [("Богдан Хмельницький", True), ("Іван Мазепа", False), ("Петро Сагайдачний", False)]),
+            ("В якому році відбулася Битва під Полтавою?", [("1709", True)]),
+            ("Де відбулась Битва під Полтавою?", [("Полтава", True)]),
+            ("Як називається угода, яка поклала кінець війні між Річчю Посполитою та Османською імперією в 1683 році?",
+             [("Карловицький мир", True), ("Берестейська унія", False), ("Андріївська угода", False)]),
+            ("В якому році відбулась Чигиринська кампанія?", [("1678", True)]),
+            ("Де знаходиться Чорнобильська АЕС?",
+             [("Прип'ять", True), ("Чернігів", False), ("Київ", False)]),
+            ("Хто був першим президентом України?", [("Леонід Кравчук", True)])
+        ]
+
+        test_name = "Історія України"
+        if not AdminTestManager.test_exists(test_name):
+            test4 = AdminTestManager.create_test(test_name,
+                                            "Тест на знання фактів з історії України",
+                                            test_data4)

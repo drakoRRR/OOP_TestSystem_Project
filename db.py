@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, DateTime, Float
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base
 
 from dotenv import load_dotenv
@@ -7,7 +7,6 @@ import os
 
 
 load_dotenv()
-
 engine = create_engine('postgresql+psycopg2://{}:{}@localhost/{}'.format(os.getenv('USER_DB'),
                                                                          os.getenv('PASSWORD_DB'),
                                                                          os.getenv('NAME_DB'),))
@@ -44,6 +43,9 @@ class Question(Base):
         self.text = text
         self.test_id = test_id
 
+    def __str__(self):
+        return self.text
+
 class Answer(Base):
     __tablename__ = 'answers'
 
@@ -59,6 +61,12 @@ class Answer(Base):
         self.is_correct = is_correct
         self.question_id = question_id
 
+    def __str__(self):
+        return self.text
+
+    def __repr__(self):
+        return f'Answer: {self.text}, is_correct: {self.is_correct}'
+
 class User(Base):
     __tablename__ = 'users'
 
@@ -67,6 +75,36 @@ class User(Base):
     start_time = Column(DateTime)
     end_time = Column(DateTime)
     score = Column(Integer, default=0)
+
+    def __init__(self, id, test_id, start_time, end_time=None, score=None):
+        self.id = id
+        self.test_id = test_id
+        self.start_time = start_time
+        self.end_time = end_time
+        self.score = score
+
+    def __str__(self):
+        return self.id
+
+
+class TestsResults(Base):
+    __tablename__ = 'tests_results'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    test_id = Column(Integer, ForeignKey('tests.id'))
+    user = Column(Integer, ForeignKey('users.id'))
+    time_complete = Column(DateTime)
+    score = Column(Integer)
+
+
+class TestsStatistic(Base):
+    __tablename__ = 'tests_statistics'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    title = Column(String)
+    test_id = Column(Integer, ForeignKey('tests.id'))
+    average_score = Column(Float)
+    average_time_complete = Column(DateTime)
 
 
 Base.metadata.create_all(engine)
