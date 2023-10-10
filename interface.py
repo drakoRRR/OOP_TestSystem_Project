@@ -6,10 +6,14 @@ from db import session, Test, TestsResults
 
 class InterFace:
     def __init__(self):
+        '''Ініцілізатор в якому завантажуємо усі створені тести та вибір меню'''
+
         LoadTests()
         self.choices = [self.menu_test, self.menu_add_test, self.menu_check_stats]
 
     def main_menu(self):
+        '''Меню користувача'''
+
         print('\t\tГоловне меню TestsQuiz')
         print('1. Пройти тест')
         print('2. Додати тест(Адмін)')
@@ -19,6 +23,8 @@ class InterFace:
 
     @staticmethod
     def menu_test():
+        '''Проходження тесту користувачем'''
+
         while True:
             print('Оберіть тест:')
             for i, test in enumerate(AdminTestManager.get_tests(), start=1):
@@ -61,6 +67,8 @@ class InterFace:
 
     @staticmethod
     def menu_add_test():
+        '''Додавання тесту адміном'''
+
         print('Яка кількість питань буде в тесті?')
         num_questions = int(input("Впишіть відповідь: "))
         test_data = []
@@ -90,6 +98,8 @@ class InterFace:
 
     @staticmethod
     def menu_check_stats():
+        '''Зібрана уся статистика по тестам'''
+
         print(f"Статистика проходження усіх тестів які існують: ")
         print(f"середній балл проходження: {TestsResults.avg_score(session)}")
         print(f"середній час проходження: {TestsResults.avg_time(session)}")

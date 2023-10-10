@@ -3,6 +3,8 @@ from managers import AdminTestManager
 
 class LoadTests:
     def __init__(self):
+        '''Створені тести які потім завантажуємо для користувачів'''
+
         test_data1 = [
             ("Яка столиця України?", [("Київ", True), ("Львів", False), ("Одеса", False)]),
             ("Скільки областей в Україні?", [("24", True), ("25", False), ("23", False)]),

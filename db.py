@@ -16,6 +16,8 @@ Base = declarative_base()
 
 
 class Test(Base):
+    '''Модель для збереження тестів'''
+
     __tablename__ = 'tests'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -32,6 +34,8 @@ class Test(Base):
         return self.name
 
 class Question(Base):
+    '''Модель збереження питань для тесту'''
+
     __tablename__ = 'questions'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -49,6 +53,8 @@ class Question(Base):
         return self.text
 
 class Answer(Base):
+    '''Модель збереження відповідей до питань'''
+
     __tablename__ = 'answers'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -70,6 +76,8 @@ class Answer(Base):
         return f'Answer: {self.text}, is_correct: {self.is_correct}'
 
 class User(Base):
+    '''Модель для збереження користувачів тесту'''
+
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -89,6 +97,8 @@ class User(Base):
 
 
 class TestsResults(Base):
+    '''Модель збереження статистики по пройденими тестам'''
+
     __tablename__ = 'tests_results'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -108,28 +118,37 @@ class TestsResults(Base):
 
     @staticmethod
     def avg_score(session):
+        '''Середній балл користувачів усіх тестів'''
+
         avg_score = session.query(func.avg(TestsResults.score)).scalar()
         return round(avg_score, 2)
 
     @staticmethod
     def avg_score_for_test(session, test_id):
+        '''Середній балл користувачів окремого тесту'''
+
         avg_score = session.query(func.avg(TestsResults.score)).filter_by(test_id=test_id).scalar()
         return round(avg_score, 2)
 
     @staticmethod
     def avg_time(session):
+        '''Середній час проходження користувачів усіх тестів'''
+
         avg_time_seconds = session.query(func.avg(func.extract('epoch', TestsResults.time_complete))).scalar()
         avg_time = datetime.timedelta(seconds=int(avg_time_seconds))
         return avg_time
 
     @staticmethod
     def avg_time_for_test(session, test_id):
+        '''Середній час проходження користувачів окремого тесту'''
+
         avg_time_seconds = session.query(func.avg(func.extract('epoch', TestsResults.time_complete))).filter_by(
             test_id=test_id).scalar()
         avg_time = datetime.timedelta(seconds=int(avg_time_seconds))
         return avg_time
 
 
+# Під'єднання до БД та створення сесії
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()

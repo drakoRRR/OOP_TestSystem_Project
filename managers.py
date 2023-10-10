@@ -5,6 +5,8 @@ from datetime import datetime, time
 class AdminTestManager:
     @staticmethod
     def create_test(name, description, questions_data):
+        '''Логіка створення тесту'''
+
         test = Test(name=name, description=description)
         session.add(test)
         session.commit()
@@ -23,10 +25,14 @@ class AdminTestManager:
 
     @staticmethod
     def get_tests():
+        '''Геттер для тестів'''
+
         return session.query(Test)
 
     @staticmethod
     def delete_test(test_id):
+        '''Логіка видалення тесту'''
+
         test = session.query(Test).filter_by(id=test_id).first()
         if test:
             session.delete(test)
@@ -36,11 +42,15 @@ class AdminTestManager:
 
     @staticmethod
     def test_exists(test_name):
+        '''Перевірка чи існує тест'''
+
         return True if session.query(Test).filter_by(name=test_name).first() else False
 
 class UserTestManager:
     @staticmethod
     def start_test(test_id):
+        '''Початок тесту де ми засікаємо наш час проходження'''
+
         test = session.query(Test).filter_by(id=test_id).first()
         if test:
             user = User(test_id=test_id, start_time=datetime.now())
@@ -51,6 +61,8 @@ class UserTestManager:
 
     @staticmethod
     def finish_test(user_id):
+        '''Кінець тесту де закінчуємо наш відлік часу'''
+
         user = session.query(User).filter_by(id=user_id).first()
         if user:
             user.end_time = datetime.now()
@@ -60,6 +72,8 @@ class UserTestManager:
 
     @staticmethod
     def get_user_choice_by_options(options, options_check, user):
+        '''Логіка відповіді з 2 і більше варіантами відповіді'''
+
         for i, option in enumerate(options, start=1):
             print(f"{i}. {option}")
 
@@ -78,6 +92,8 @@ class UserTestManager:
 
     @staticmethod
     def get_user_choice(option_check, user):
+        '''Логіка відповіді де користувач сам вводить дані'''
+
         while True:
             try:
                 choice = input("Напишіть відповідь: ")
