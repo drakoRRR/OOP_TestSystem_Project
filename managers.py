@@ -1,5 +1,5 @@
 from db import session, Test, Question, Answer, User
-from datetime import datetime
+from datetime import datetime, time
 
 
 class AdminTestManager:
@@ -40,10 +40,10 @@ class AdminTestManager:
 
 class UserTestManager:
     @staticmethod
-    def start_test(user_id, test_id):
+    def start_test(test_id):
         test = session.query(Test).filter_by(id=test_id).first()
         if test:
-            user = User(id=user_id, test_id=test_id, start_time=datetime.now())
+            user = User(test_id=test_id, start_time=datetime.now())
             session.add(user)
             session.commit()
             return user
@@ -87,8 +87,3 @@ class UserTestManager:
                     return choice
             except ValueError:
                 print("Будь ласка, введіть номер відповіді.")
-
-
-
-
-

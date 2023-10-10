@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, DateTime, func, Interval
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, Time, func, DateTime
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base
 
 from dotenv import load_dotenv
@@ -78,8 +78,7 @@ class User(Base):
     end_time = Column(DateTime)
     score = Column(Integer, default=0)
 
-    def __init__(self, id, test_id, start_time, end_time=None, score=None):
-        self.id = id
+    def __init__(self, test_id, start_time, end_time=None, score=None):
         self.test_id = test_id
         self.start_time = start_time
         self.end_time = end_time
@@ -95,7 +94,7 @@ class TestsResults(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     test_id = Column(Integer, ForeignKey('tests.id'))
     user = Column(Integer, ForeignKey('users.id'))
-    time_complete = Column(DateTime)
+    time_complete = Column(Time)  #Time
     score = Column(Integer)
 
     def __init__(self, test_id, user, time_complete, score):
@@ -110,24 +109,24 @@ class TestsResults(Base):
     @staticmethod
     def avg_score(session):
         avg_score = session.query(func.avg(TestsResults.score)).scalar()
-        return round(avg_score)
+        return round(avg_score, 2)
 
     @staticmethod
     def avg_score_for_test(session, test_id):
         avg_score = session.query(func.avg(TestsResults.score)).filter_by(test_id=test_id).scalar()
-        return round(avg_score)
+        return round(avg_score, 2)
 
     @staticmethod
     def avg_time(session):
         avg_time_seconds = session.query(func.avg(func.extract('epoch', TestsResults.time_complete))).scalar()
-        avg_time = datetime.datetime.fromtimestamp(avg_time_seconds)
+        avg_time = datetime.timedelta(seconds=int(avg_time_seconds))
         return avg_time
 
     @staticmethod
     def avg_time_for_test(session, test_id):
         avg_time_seconds = session.query(func.avg(func.extract('epoch', TestsResults.time_complete))).filter_by(
             test_id=test_id).scalar()
-        avg_time = datetime.datetime.fromtimestamp(avg_time_seconds)
+        avg_time = datetime.timedelta(seconds=int(avg_time_seconds))
         return avg_time
 
 
