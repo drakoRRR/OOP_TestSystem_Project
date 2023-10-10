@@ -1,4 +1,6 @@
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, DateTime, Float
+import datetime
+
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, DateTime, func, Interval
 from sqlalchemy.orm import relationship, sessionmaker, declarative_base
 
 from dotenv import load_dotenv
@@ -96,19 +98,40 @@ class TestsResults(Base):
     time_complete = Column(DateTime)
     score = Column(Integer)
 
+    def __init__(self, test_id, user, time_complete, score):
+        self.test_id = test_id
+        self.user = user
+        self.time_complete = time_complete
+        self.score = score
 
-class TestsStatistic(Base):
-    __tablename__ = 'tests_statistics'
+    def __str__(self):
+        return f'User: {self.user.id}, test: {self.test_id}, score: {self.score}'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    title = Column(String)
-    test_id = Column(Integer, ForeignKey('tests.id'))
-    average_score = Column(Float)
-    average_time_complete = Column(DateTime)
+    @staticmethod
+    def avg_score(session):
+        avg_score = session.query(func.avg(TestsResults.score)).scalar()
+        return round(avg_score)
+
+    @staticmethod
+    def avg_score_for_test(session, test_id):
+        avg_score = session.query(func.avg(TestsResults.score)).filter_by(test_id=test_id).scalar()
+        return round(avg_score)
+
+    @staticmethod
+    def avg_time(session):
+        avg_time_seconds = session.query(func.avg(func.extract('epoch', TestsResults.time_complete))).scalar()
+        avg_time = datetime.datetime.fromtimestamp(avg_time_seconds)
+        return avg_time
+
+    @staticmethod
+    def avg_time_for_test(session, test_id):
+        avg_time_seconds = session.query(func.avg(func.extract('epoch', TestsResults.time_complete))).filter_by(
+            test_id=test_id).scalar()
+        avg_time = datetime.datetime.fromtimestamp(avg_time_seconds)
+        return avg_time
 
 
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
-
 
