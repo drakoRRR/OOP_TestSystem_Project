@@ -9,7 +9,7 @@ class InterFace:
         '''Ініцілізатор в якому завантажуємо усі створені тести та вибір меню'''
 
         LoadTests()
-        self.choices = [self.menu_test, self.menu_add_test, self.menu_check_stats]
+        self.choices = [self.menu_test, self.menu_add_test, self.menu_del_test, self.menu_check_stats]
 
     def main_menu(self):
         '''Меню користувача'''
@@ -17,7 +17,8 @@ class InterFace:
         print('\t\tГоловне меню TestsQuiz')
         print('1. Пройти тест')
         print('2. Додати тест(Адмін)')
-        print('3. Переглянути статистику успішності проходження тестів')
+        print('3. Видалити тест(Адмін)')
+        print('4. Переглянути статистику успішності проходження тестів')
         choice = int(input("Оберіть варіант: "))
         return self.choices[choice-1]()
 
@@ -112,3 +113,15 @@ class InterFace:
                 print(f"середній час проходження: {TestsResults.avg_time_for_test(session, test.id)}")
             except TypeError:
                 print(f"Для цього тесту ще немає статистики")
+
+    @staticmethod
+    def menu_del_test():
+        while True:
+            print('Оберіть тест який хочете видалити:')
+            for i, test in enumerate(AdminTestManager.get_tests(), start=1):
+                print(f"{test.id}. {test}")
+            choice = int(input("Оберіть номер тесту: "))
+            break
+
+        AdminTestManager.delete_test(choice)
+        return None
