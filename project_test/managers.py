@@ -1,5 +1,5 @@
 from db import session, Test, Question, Answer, User
-from datetime import datetime, time
+from datetime import datetime
 
 
 class AdminTestManager:
@@ -97,9 +97,12 @@ class UserTestManager:
         while True:
             try:
                 choice = input("Напишіть відповідь: ")
+                # Перевести у 
                 if option_check[0].lower() == choice.lower():
                     user.score += 1
                     session.commit()
+                    return choice
+                else:
                     return choice
             except ValueError:
                 print("Будь ласка, введіть номер відповіді.")
