@@ -33,6 +33,17 @@ class Test(Base):
     def __str__(self):
         return self.name
 
+class Types(Base):
+    '''Типи питань'''
+
+    __tablename__ = 'types'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    type_question = Column(String)
+
+    def __str__(self):
+        return self.type_question
+
 class Question(Base):
     '''Модель збереження питань для тесту'''
 
@@ -41,6 +52,7 @@ class Question(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(String)
     test_id = Column(Integer, ForeignKey('tests.id'))
+    type_id = Column(String, ForeignKey('types.id'))
 
     test = relationship('Test', back_populates='questions')
     answers = relationship('Answer', back_populates='question')

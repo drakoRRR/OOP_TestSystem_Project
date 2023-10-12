@@ -1,9 +1,17 @@
 from managers import AdminTestManager
+from project_test.db import Types, session
 
 
 class LoadTests:
     def __init__(self):
         '''Створені тести які потім завантажуємо для користувачів'''
+        self.types = ['options_one_correct', 'options_few_correct', 'option_blank', 'option_bool']
+
+        for type_text in self.types:
+            type_add = Types(type_question=type_text)
+            session.add(type_add)
+
+        session.commit()
 
         test_data1 = [
             ("Яка столиця України?", [("Київ", True), ("Львів", False), ("Одеса", False)]),

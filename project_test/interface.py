@@ -4,12 +4,20 @@ from fixtures import LoadTests
 from managers import AdminTestManager, UserTestManager
 from db import session, Test, TestsResults
 
+from bases.question_base import QuestionOptions, QuestionFewOptions, QuestionTrueFalse, QuestionUserBlank
+
 class InterFace:
     def __init__(self):
         '''Ініцілізатор в якому завантажуємо усі створені тести та вибір меню'''
 
         LoadTests()
-        self.choices = [self.menu_test, self.menu_add_test, self.menu_del_test, self.menu_check_stats]
+        self.choices = [
+            self.menu_test,
+            self.menu_add_test,
+            self.menu_del_test,
+            self.menu_check_stats,
+            self.menu_search_test
+        ]
 
     def main_menu(self):
         '''Меню користувача'''
@@ -19,19 +27,21 @@ class InterFace:
         print('2. Додати тест(Адмін)')
         print('3. Видалити тест(Адмін)')
         print('4. Переглянути статистику успішності проходження тестів')
+        print('5. Знайти тест(Пошук)')
         choice = int(input("Оберіть варіант: "))
         return self.choices[choice-1]()
 
     @staticmethod
-    def menu_test():
+    def menu_test(after_search=False, choice=None):
         '''Проходження тесту користувачем'''
 
-        while True:
-            print('Оберіть тест:')
-            for i, test in enumerate(AdminTestManager.get_tests(), start=1):
-                print(f"{test.id}. {test}")
-            choice = int(input("Оберіть номер тесту: "))
-            break
+        if not after_search:
+            while True:
+                print('Оберіть тест:')
+                for i, test in enumerate(AdminTestManager.get_tests(), start=1):
+                    print(f"{test.id}. {test}")
+                choice = int(input("Оберіть номер тесту: "))
+                break
 
         test = session.query(Test).filter_by(id=choice).first()
 
@@ -40,6 +50,14 @@ class InterFace:
             print(f"Починаемо тест '{test.name}'")
             for question in test.questions:
                 print(f"Питання: {question.text}\n")
+                # match question:
+                #     case QuestionOptions():
+                #         UserTestManager.get_user_choice_by_options()
+                #     case QuestionFewOptions():
+                #         UserTestManager.get_user_few_choices()
+                #     case QuestionTrueFalse():
+                #         UserTestManager.get_user_true_false()
+                #     case QuestionUserBlank
                 if len(question.answers) > 1:
                     UserTestManager.get_user_choice_by_options(
                         [answer.text for answer in question.answers],
@@ -125,3 +143,25 @@ class InterFace:
 
         AdminTestManager.delete_test(choice)
         return None
+
+    def menu_search_test(self):
+        print('За яким критерієм ви шукаете книгу ?')
+        print('1. За назвою')
+        print('2. За описом')
+        choice_category = int(input('Ваша відповідь: '))
+
+        user_search = input('Пошук: ')
+
+        if choice_category == 1:
+            tests = UserTestManager.search_by_title(user_search)
+        else:
+            tests = UserTestManager.search_by_description(user_search)
+
+        print('Результати: ')
+
+        for test in tests:
+            print(f'{test.id}. {test.name}')
+
+        test_to_pass = int(input('Який тест ви хочете пройти: '))
+
+        return self.menu_test(after_search=True, choice=test_to_pass)

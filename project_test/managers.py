@@ -1,6 +1,9 @@
 from db import session, Test, Question, Answer, User
 from datetime import datetime
 
+from project_test.bases.question_base import QuestionOptions, QuestionUserBlank
+from project_test.bases.search_test_base import SearchTestByName, SearchTestByDescription
+
 
 class AdminTestManager:
     @staticmethod
@@ -73,36 +76,23 @@ class UserTestManager:
     @staticmethod
     def get_user_choice_by_options(options, options_check, user):
         '''Логіка відповіді з 2 і більше варіантами відповіді'''
-
-        for i, option in enumerate(options, start=1):
-            print(f"{i}. {option}")
-
-        while True:
-            try:
-                choice = int(input("Оберіть номер відповіді: "))
-                if 1 <= choice <= len(options):
-                    if options_check[choice-1]:
-                        user.score += 1
-                        session.commit()
-                    return choice
-                else:
-                    print("Будь ласка, оберіть правильный номер.")
-            except ValueError:
-                print("Будь ласка, введіть номер відповіді.")
+        QuestionOptions.get_answers_for_question(options)
+        QuestionOptions.get_user_choice(options, options_check, user)
 
     @staticmethod
     def get_user_choice(option_check, user):
         '''Логіка відповіді де користувач сам вводить дані'''
 
-        while True:
-            try:
-                choice = input("Напишіть відповідь: ")
-                # Перевести у 
-                if option_check[0].lower() == choice.lower():
-                    user.score += 1
-                    session.commit()
-                    return choice
-                else:
-                    return choice
-            except ValueError:
-                print("Будь ласка, введіть номер відповіді.")
+        QuestionUserBlank.get_user_choice(option_check, user)
+
+    @staticmethod
+    def search_by_title(user_input):
+        '''Пошук за назвою тесту'''
+
+        return SearchTestByName.find_test(user_input)
+
+    @staticmethod
+    def search_by_description(user_input):
+        '''Пошук за назвою тесту'''
+
+        return SearchTestByDescription.find_test(user_input)
