@@ -48,7 +48,7 @@ class Types(Base):
 
     @staticmethod
     def exists(type_question_pr):
-        return True if session.query(Test).filter_by(name=type_question_pr).first() else False
+        return True if session.query(Types).filter_by(type_question=type_question_pr).first() else False
 
 class Question(Base):
     '''Модель збереження питань для тесту'''

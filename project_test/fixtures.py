@@ -92,6 +92,21 @@ class LoadTests:
             ("Чи омиває Чорне море Україну?", [("Так", True), ("Ні", False)], 'option_bool')
         ]
 
+        test_data6 = [
+            ("Які з наступних кольорів є національними кольорами України?",
+             [("Блакитний", True), ("Червоний", False), ("Жовтий", True), ("Зелений", False)],
+             'options_few_correct'),
+            ("Тарас Шевченко - видатний український поет і художник", [("Так", True), ("Ні", False)], 'option_bool'),
+            ("Яка річка є найбільшою на території України?", [("Дніпро", True), ("Дунай", False), ("Прут", False)],
+             'options_one_correct'),
+            ("Скільки областей є в Україні?", [("13", True)], 'option_blank'),
+            ("Які з нижченаведених міст є столицями областей України?",
+             [("Львів", False), ("Харків", True), ("Одеса", False), ("Київ", True)], 'options_few_correct'),
+            ("Коли в Україні святкують День Незалежності?", [("1 січня", True), ("24 серпня", False), ("7 листопада", False)],
+             'options_one_correct'),
+            ("Карпати - це гірський ланцюг, який пролягає на заході України.", [("Так", True), ("Ні", False)], 'option_bool')
+        ]
+
         test_name = "Загальні знання про Україну"
         if not AdminTestManager.test_exists(test_name):
             test1 = AdminTestManager.create_test(test_name, "Тест на знання загальних фактів про Україну", test_data1)
@@ -114,3 +129,7 @@ class LoadTests:
         test_name = "Базові знання"
         if not AdminTestManager.test_exists(test_name):
             test5 = AdminTestManager.create_test(test_name, "Тест на базові знання", test_data5)
+
+        test_name = "Всі види питань"
+        if not AdminTestManager.test_exists(test_name):
+            test6 = AdminTestManager.create_test(test_name, "Тест на перевірку знань", test_data6)
