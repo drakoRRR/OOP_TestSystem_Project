@@ -98,21 +98,26 @@ class QuestionTrueFalse(QuestionBase):
 
     @staticmethod
     def get_answers_for_question():
-        print("1. Правда")
-        print("0. Брехня")
+        pass
 
     @staticmethod
-    def get_user_choice(option_check, user):
+    def get_user_choice(options, user):
         while True:
             try:
-                choice = int(input("Оберіть 1 для Правда або 2 для Брехня: "))
-                if 0 <= choice <= 1:
-                    if option_check == choice:
-                        user.score += 1
-                        session.commit()
+                choice = input("Впишіть так або ні: ")
+                right_answer = None
+
+                for option in options:
+                    if option.is_correct:
+                        right_answer = option.text
+
+                if right_answer.lower() == choice.lower():
+                    user.score += 1
+                    session.commit()
                     return choice
-                else:
-                    print("Будь ласка, оберіть 1 для Правда або 0 для Брехня.")
+
+                return None
+
             except ValueError:
-                print("Будь ласка, введіть 1 для Правда або 0 для Брехня.")
+                print("Будь ласка, впишіть так або ні.")
 

@@ -19,6 +19,8 @@ class InterFace:
             self.menu_search_test
         ]
 
+        self.types = ['options_one_correct', 'options_few_correct', 'option_blank', 'option_bool']
+
     def main_menu(self):
         '''Меню користувача'''
 
@@ -43,6 +45,7 @@ class InterFace:
                 choice = int(input("Оберіть номер тесту: "))
                 break
 
+        types = ['options_one_correct', 'options_few_correct', 'option_blank', 'option_bool']
         test = session.query(Test).filter_by(id=choice).first()
 
         user = UserTestManager.start_test(test.id)
@@ -50,22 +53,23 @@ class InterFace:
             print(f"Починаемо тест '{test.name}'")
             for question in test.questions:
                 print(f"Питання: {question.text}\n")
-                # match question:
-                #     case QuestionOptions():
-                #         UserTestManager.get_user_choice_by_options()
-                #     case QuestionFewOptions():
-                #         UserTestManager.get_user_few_choices()
-                #     case QuestionTrueFalse():
-                #         UserTestManager.get_user_true_false()
-                #     case QuestionUserBlank
-                if len(question.answers) > 1:
+                if question.types.type_question == types[0]:
                     UserTestManager.get_user_choice_by_options(
                         [answer.text for answer in question.answers],
                         [answer.is_correct for answer in question.answers],
                         user)
-                else:
+                elif question.types.type_question == types[1]:
+                    UserTestManager.get_user_few_choices(
+                        [answer.text for answer in question.answers],
+                        [answer.is_correct for answer in question.answers],
+                        user)
+                elif question.types.type_question == types[2]:
                     UserTestManager.get_user_choice(option_check=[answer.text for answer in question.answers],
                                                     user=user)
+                elif question.types.type_question == types[3]:
+                    UserTestManager.get_user_true_false(
+                        [answer for answer in question.answers],
+                        user)
 
             user = UserTestManager.finish_test(user.id)
             if user:

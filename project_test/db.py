@@ -41,8 +41,14 @@ class Types(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     type_question = Column(String)
 
+    questions = relationship('Question', back_populates='types')
+
     def __str__(self):
         return self.type_question
+
+    @staticmethod
+    def exists(type_question_pr):
+        return True if session.query(Test).filter_by(name=type_question_pr).first() else False
 
 class Question(Base):
     '''Модель збереження питань для тесту'''
@@ -52,14 +58,16 @@ class Question(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(String)
     test_id = Column(Integer, ForeignKey('tests.id'))
-    type_id = Column(String, ForeignKey('types.id'))
+    type_id = Column(Integer, ForeignKey('types.id'))  # Изменил на Integer
 
     test = relationship('Test', back_populates='questions')
     answers = relationship('Answer', back_populates='question')
+    types = relationship('Types', back_populates='questions')  # Изменил на 'questions'
 
-    def __init__(self, text, test_id):
+    def __init__(self, text, test_id, type_id):
         self.text = text
         self.test_id = test_id
+        self.type_id = type_id
 
     def __str__(self):
         return self.text

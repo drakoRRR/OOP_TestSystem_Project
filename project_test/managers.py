@@ -1,7 +1,7 @@
-from db import session, Test, Question, Answer, User
+from db import session, Test, Question, Answer, User, Types
 from datetime import datetime
 
-from project_test.bases.question_base import QuestionOptions, QuestionUserBlank
+from project_test.bases.question_base import QuestionOptions, QuestionUserBlank, QuestionFewOptions, QuestionTrueFalse
 from project_test.bases.search_test_base import SearchTestByName, SearchTestByDescription
 
 
@@ -14,8 +14,10 @@ class AdminTestManager:
         session.add(test)
         session.commit()
 
-        for question_text, answers in questions_data:
-            question = Question(text=question_text, test_id=test.id)
+        for question_text, answers, question_type in questions_data:
+            question = Question(text=question_text,
+                                test_id=test.id,
+                                type_id=session.query(Types.id).filter_by(type_question=question_type).scalar())
             session.add(question)
             session.commit()
 
@@ -75,7 +77,7 @@ class UserTestManager:
 
     @staticmethod
     def get_user_choice_by_options(options, options_check, user):
-        '''Логіка відповіді з 2 і більше варіантами відповіді'''
+        '''Логіка відповіді з 2 і більше варіантами відповіді і лише одним правильним варіантом'''
         QuestionOptions.get_answers_for_question(options)
         QuestionOptions.get_user_choice(options, options_check, user)
 
@@ -84,6 +86,20 @@ class UserTestManager:
         '''Логіка відповіді де користувач сам вводить дані'''
 
         QuestionUserBlank.get_user_choice(option_check, user)
+
+    @staticmethod
+    def get_user_few_choices(options, options_check, user):
+        '''Логіка відповіді з 2 і більше варіантами відповіді і декількома правильними варінтами'''
+
+        QuestionFewOptions.get_answers_for_question(options)
+        QuestionFewOptions.get_user_choice(options, options_check, user)
+
+    @staticmethod
+    def get_user_true_false(options, user):
+        '''Логіка відповіді де або правильно або не правильно(True/False)'''
+
+        QuestionTrueFalse.get_answers_for_question()
+        QuestionTrueFalse.get_user_choice(options, user)
 
     @staticmethod
     def search_by_title(user_input):
