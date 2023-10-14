@@ -11,7 +11,7 @@ class InterFace:
         '''Ініцілізатор в якому завантажуємо усі створені тести та вибір меню'''
 
         LoadTests()
-        self.choices = [
+        self.__choices = [
             self.menu_test,
             self.menu_add_test,
             self.menu_del_test,
@@ -19,7 +19,7 @@ class InterFace:
             self.menu_search_test
         ]
 
-        self.types = ['options_one_correct', 'options_few_correct', 'option_blank', 'option_bool']
+        self.__types = ['options_one_correct', 'options_few_correct', 'option_blank', 'option_bool']
 
     def main_menu(self):
         '''Меню користувача'''
@@ -31,7 +31,7 @@ class InterFace:
         print('4. Переглянути статистику успішності проходження тестів')
         print('5. Знайти тест(Пошук)')
         choice = int(input("Оберіть варіант: "))
-        return self.choices[choice-1]()
+        return self.__choices[choice-1]()
 
     def menu_test(self, after_search=False, choice=None):
         '''Проходження тесту користувачем'''
@@ -51,20 +51,20 @@ class InterFace:
             print(f"Починаемо тест '{test.name}'")
             for question in test.questions:
                 print(f"Питання: {question.text}\n")
-                if question.types.type_question == self.types[0]:
+                if question.types.type_question == self.__types[0]:
                     UserTestManager.get_user_choice_by_options(
                         [answer.text for answer in question.answers],
                         [answer.is_correct for answer in question.answers],
                         user)
-                elif question.types.type_question == self.types[1]:
+                elif question.types.type_question == self.__types[1]:
                     UserTestManager.get_user_few_choices(
                         [answer.text for answer in question.answers],
                         [answer.is_correct for answer in question.answers],
                         user)
-                elif question.types.type_question == self.types[2]:
+                elif question.types.type_question == self.__types[2]:
                     UserTestManager.get_user_choice(option_check=[answer.text for answer in question.answers],
                                                     user=user)
-                elif question.types.type_question == self.types[3]:
+                elif question.types.type_question == self.__types[3]:
                     UserTestManager.get_user_true_false(
                         [answer for answer in question.answers],
                         user)
@@ -110,7 +110,7 @@ class InterFace:
                 is_correct = input(f"Це правильна відповідь? (Так/Ні): ").strip().lower() == "так"
                 answer_options.append((option_text, is_correct))
 
-            test_data.append((question_text, answer_options, self.types[type_question-1]))
+            test_data.append((question_text, answer_options, self.__types[type_question-1]))
 
         test_name = input("Впишіть назву тесту: ")
         test_description = input("Впишіть невеликий опис тесту: ")
