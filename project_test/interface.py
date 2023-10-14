@@ -33,8 +33,7 @@ class InterFace:
         choice = int(input("Оберіть варіант: "))
         return self.choices[choice-1]()
 
-    @staticmethod
-    def menu_test(after_search=False, choice=None):
+    def menu_test(self, after_search=False, choice=None):
         '''Проходження тесту користувачем'''
 
         if not after_search:
@@ -45,7 +44,6 @@ class InterFace:
                 choice = int(input("Оберіть номер тесту: "))
                 break
 
-        types = ['options_one_correct', 'options_few_correct', 'option_blank', 'option_bool']
         test = session.query(Test).filter_by(id=choice).first()
 
         user = UserTestManager.start_test(test.id)
@@ -53,20 +51,20 @@ class InterFace:
             print(f"Починаемо тест '{test.name}'")
             for question in test.questions:
                 print(f"Питання: {question.text}\n")
-                if question.types.type_question == types[0]:
+                if question.types.type_question == self.types[0]:
                     UserTestManager.get_user_choice_by_options(
                         [answer.text for answer in question.answers],
                         [answer.is_correct for answer in question.answers],
                         user)
-                elif question.types.type_question == types[1]:
+                elif question.types.type_question == self.types[1]:
                     UserTestManager.get_user_few_choices(
                         [answer.text for answer in question.answers],
                         [answer.is_correct for answer in question.answers],
                         user)
-                elif question.types.type_question == types[2]:
+                elif question.types.type_question == self.types[2]:
                     UserTestManager.get_user_choice(option_check=[answer.text for answer in question.answers],
                                                     user=user)
-                elif question.types.type_question == types[3]:
+                elif question.types.type_question == self.types[3]:
                     UserTestManager.get_user_true_false(
                         [answer for answer in question.answers],
                         user)
@@ -88,8 +86,7 @@ class InterFace:
         else:
             print("Помилка при початку тесту")
 
-    @staticmethod
-    def menu_add_test():
+    def menu_add_test(self):
         '''Додавання тесту адміном'''
 
         print('Яка кількість питань буде в тесті?')
@@ -97,6 +94,13 @@ class InterFace:
         test_data = []
 
         for i in range(num_questions):
+            print()
+            print('1. Питання з одним правильним варіантом')
+            print('2. Питання з декількома правильними варіантом')
+            print('3. Питання з відкритою відповідь')
+            print('4. Питання з на Правда/Не правда')
+
+            type_question = int(input("Оберіть тип питання: "))
             question_text = input(f"Впишіть текст питання {i + 1}: ")
             answer_options = []
 
@@ -106,7 +110,7 @@ class InterFace:
                 is_correct = input(f"Це правильна відповідь? (Так/Ні): ").strip().lower() == "так"
                 answer_options.append((option_text, is_correct))
 
-            test_data.append((question_text, answer_options))
+            test_data.append((question_text, answer_options, self.types[type_question-1]))
 
         test_name = input("Впишіть назву тесту: ")
         test_description = input("Впишіть невеликий опис тесту: ")
