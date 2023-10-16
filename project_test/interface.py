@@ -149,10 +149,7 @@ class InterFace:
 
         user_search = input('Пошук: ')
 
-        if choice_category == 1:
-            tests = UserTestManager.search_by_title(user_search)
-        else:
-            tests = UserTestManager.search_by_description(user_search)
+        tests = UserTestManager.get_search(choice_category, user_search)
 
         print('Результати: ')
 

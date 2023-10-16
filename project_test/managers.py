@@ -77,7 +77,7 @@ class UserTestManager:
 
     @staticmethod
     def get_user_choice(type_of_question=None, options=None, options_check=None, user=None):
-        '''Логіка відповіді де користувач сам вводить дані'''
+        '''Логіка відповідей'''
 
         type_of_questions = {
             'options_one_correct': QuestionOptions,
@@ -89,4 +89,11 @@ class UserTestManager:
         type_of_questions[type_of_question].get_answers_for_question(options)
         type_of_questions[type_of_question].get_user_choice(options, options_check, user)
 
+    @staticmethod
+    def get_search(choice_category, user_search):
+        '''Логіка пошуку'''
+
+        type_of_search = [SearchTestByName, SearchTestByDescription]
+
+        return type_of_search[choice_category-1].find_test(user_search)
 
