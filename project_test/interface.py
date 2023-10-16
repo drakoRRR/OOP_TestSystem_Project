@@ -51,23 +51,12 @@ class InterFace:
             print(f"Починаемо тест '{test.name}'")
             for question in test.questions:
                 print(f"Питання: {question.text}\n")
-                if question.types.type_question == self.__types[0]:
-                    UserTestManager.get_user_choice_by_options(
-                        [answer.text for answer in question.answers],
-                        [answer.is_correct for answer in question.answers],
-                        user)
-                elif question.types.type_question == self.__types[1]:
-                    UserTestManager.get_user_few_choices(
-                        [answer.text for answer in question.answers],
-                        [answer.is_correct for answer in question.answers],
-                        user)
-                elif question.types.type_question == self.__types[2]:
-                    UserTestManager.get_user_choice(option_check=[answer.text for answer in question.answers],
-                                                    user=user)
-                elif question.types.type_question == self.__types[3]:
-                    UserTestManager.get_user_true_false(
-                        [answer for answer in question.answers],
-                        user)
+
+                UserTestManager.get_user_choice(
+                    question.types.type_question,
+                    [answer.text for answer in question.answers],
+                    [answer.is_correct for answer in question.answers],
+                    user)
 
             user = UserTestManager.finish_test(user.id)
             if user:

@@ -5,13 +5,13 @@ from project_test.db import session
 
 class QuestionBase(ABC):
     @abstractmethod
-    def get_answers_for_question(self):
+    def get_answers_for_question(self, options=None):
         '''Отримати тест для подальшої відповіді користувача'''
 
         pass
 
     @abstractmethod
-    def get_user_choice(self):
+    def get_user_choice(self, options=None, options_check=None, user=None):
         '''Отримати відповідь для подальшої відповіді користувача'''
 
         pass
@@ -44,16 +44,15 @@ class QuestionOptions(QuestionBase):
 class QuestionUserBlank(QuestionBase):
     '''Відповідь вписує користувач'''
 
-    def get_answers_for_question(self):
+    def get_answers_for_question(self, options=None):
         pass
 
     @staticmethod
-    def get_user_choice(option_check, user):
+    def get_user_choice(options, options_check, user):
         while True:
             try:
                 choice = input("Напишіть відповідь: ")
-                # Перевести у
-                if option_check[0].lower() == choice.lower():
+                if options[0].lower() == choice.lower():
                     user.score += 1
                     session.commit()
                     return choice
@@ -96,20 +95,15 @@ class QuestionFewOptions(QuestionBase):
 class QuestionTrueFalse(QuestionBase):
     '''Відповідь на вопросы типа "Правда" або "Брехня"'''
 
-    @staticmethod
-    def get_answers_for_question():
+    def get_answers_for_question(self, options=None):
         pass
 
     @staticmethod
-    def get_user_choice(options, user):
+    def get_user_choice(options, options_check, user):
         while True:
             try:
                 choice = input("Впишіть так або ні: ")
-                right_answer = None
-
-                for option in options:
-                    if option.is_correct:
-                        right_answer = option.text
+                right_answer = options[options_check.index(True)]
 
                 if right_answer.lower() == choice.lower():
                     user.score += 1

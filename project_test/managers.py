@@ -76,39 +76,17 @@ class UserTestManager:
         return None
 
     @staticmethod
-    def get_user_choice_by_options(options, options_check, user):
-        '''Логіка відповіді з 2 і більше варіантами відповіді і лише одним правильним варіантом'''
-        QuestionOptions.get_answers_for_question(options)
-        QuestionOptions.get_user_choice(options, options_check, user)
-
-    @staticmethod
-    def get_user_choice(option_check, user):
+    def get_user_choice(type_of_question=None, options=None, options_check=None, user=None):
         '''Логіка відповіді де користувач сам вводить дані'''
 
-        QuestionUserBlank.get_user_choice(option_check, user)
+        type_of_questions = {
+            'options_one_correct': QuestionOptions,
+            'options_few_correct': QuestionFewOptions,
+            'option_blank': QuestionUserBlank,
+            'option_bool': QuestionTrueFalse
+        }
 
-    @staticmethod
-    def get_user_few_choices(options, options_check, user):
-        '''Логіка відповіді з 2 і більше варіантами відповіді і декількома правильними варінтами'''
+        type_of_questions[type_of_question].get_answers_for_question(options)
+        type_of_questions[type_of_question].get_user_choice(options, options_check, user)
 
-        QuestionFewOptions.get_answers_for_question(options)
-        QuestionFewOptions.get_user_choice(options, options_check, user)
 
-    @staticmethod
-    def get_user_true_false(options, user):
-        '''Логіка відповіді де або правильно або не правильно(True/False)'''
-
-        QuestionTrueFalse.get_answers_for_question()
-        QuestionTrueFalse.get_user_choice(options, user)
-
-    @staticmethod
-    def search_by_title(user_input):
-        '''Пошук за назвою тесту'''
-
-        return SearchTestByName.find_test(user_input)
-
-    @staticmethod
-    def search_by_description(user_input):
-        '''Пошук за назвою тесту'''
-
-        return SearchTestByDescription.find_test(user_input)
