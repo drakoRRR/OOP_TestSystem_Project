@@ -6,7 +6,7 @@ from project_test.db import session, Test
 class SearchTestBase(ABC):
 
     @abstractmethod
-    def find_test(self):
+    def find_test(self, user_input=None):
         pass
 
 
