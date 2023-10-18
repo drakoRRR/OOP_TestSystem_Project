@@ -75,21 +75,21 @@ class UserTestManager:
             return user
         return None
 
-    @staticmethod
-    def get_user_choice(type_of_question=None, options=None, options_check=None, user=None):
-        '''Логіка відповідей'''
-
-        type_of_questions = {
-            'options_one_correct': QuestionOptions,
-            'options_few_correct': QuestionFewOptions,
-            'option_blank': QuestionUserBlank,
-            'option_bool': QuestionTrueFalse
-        }
-
-        object_class = type_of_questions[type_of_question](options, options_check, user)
-
-        object_class.get_answers_for_question()
-        object_class.get_user_choice()
+    # @staticmethod
+    # def get_user_choice(type_of_question=None, options=None, options_check=None, user=None):
+    #     '''Логіка відповідей'''
+    #
+    #     type_of_questions = {
+    #         'options_one_correct': QuestionOptions,
+    #         'options_few_correct': QuestionFewOptions,
+    #         'option_blank': QuestionUserBlank,
+    #         'option_bool': QuestionTrueFalse
+    #     }
+    #
+    #     object_class = type_of_questions[type_of_question](options, options_check, user)
+    #
+    #     object_class.get_answers_for_question()
+    #     object_class.get_user_choice()
 
     @staticmethod
     def get_search(choice_category, user_search):
