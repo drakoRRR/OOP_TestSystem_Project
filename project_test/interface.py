@@ -5,6 +5,8 @@ from managers import AdminTestManager, UserTestManager
 from db import session, Test, TestsResults
 
 from bases.question_base import QuestionOptions, QuestionFewOptions, QuestionTrueFalse, QuestionUserBlank
+from project_test.Factory import QuestionFactory
+
 
 class InterFace:
     def __init__(self):
@@ -49,14 +51,12 @@ class InterFace:
         user = UserTestManager.start_test(test.id)
         if user:
             print(f"Починаемо тест '{test.name}'")
-            for question in test.questions:
-                print(f"Питання: {question.text}\n")
 
-                UserTestManager.get_user_choice(
-                    question.types.type_question,
-                    [answer.text for answer in question.answers],
-                    [answer.is_correct for answer in question.answers],
-                    user)
+            factory = QuestionFactory(questions=test.questions, user=user)
+            questions = factory.get_list_of_questions()
+
+            for question in questions:
+                question()
 
             user = UserTestManager.finish_test(user.id)
             if user:

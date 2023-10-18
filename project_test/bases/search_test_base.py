@@ -4,18 +4,19 @@ from project_test.db import session, Test
 
 
 class SearchTestBase(ABC):
-
     @abstractmethod
-    def find_test(self, user_input=None):
+    def find_test(self):
         pass
 
 
 class SearchTestByName(SearchTestBase):
     '''Знайти тест за назвою тесту'''
 
-    @staticmethod
-    def find_test(user_input):
-        found_tests = session.query(Test).filter(Test.name == user_input).all()
+    def __init__(self, user_input):
+        self.user_input = user_input
+
+    def find_test(self):
+        found_tests = session.query(Test).filter(Test.name == self.user_input).all()
 
         return found_tests
 
@@ -23,9 +24,11 @@ class SearchTestByName(SearchTestBase):
 class SearchTestByDescription(SearchTestBase):
     '''Знайти тест за описом тесту'''
 
-    @staticmethod
-    def find_test(user_input):
-        found_tests = session.query(Test).filter(Test.description == user_input).all()
+    def __init__(self, user_input):
+        self.user_input = user_input
+
+    def find_test(self):
+        found_tests = session.query(Test).filter(Test.description == self.user_input).all()
 
         return found_tests
 

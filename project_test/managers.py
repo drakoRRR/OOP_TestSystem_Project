@@ -86,8 +86,10 @@ class UserTestManager:
             'option_bool': QuestionTrueFalse
         }
 
-        type_of_questions[type_of_question].get_answers_for_question(options)
-        type_of_questions[type_of_question].get_user_choice(options, options_check, user)
+        object_class = type_of_questions[type_of_question](options, options_check, user)
+
+        object_class.get_answers_for_question()
+        object_class.get_user_choice()
 
     @staticmethod
     def get_search(choice_category, user_search):

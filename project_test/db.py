@@ -58,11 +58,11 @@ class Question(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(String)
     test_id = Column(Integer, ForeignKey('tests.id'))
-    type_id = Column(Integer, ForeignKey('types.id'))  # Изменил на Integer
+    type_id = Column(Integer, ForeignKey('types.id'))
 
     test = relationship('Test', back_populates='questions')
     answers = relationship('Answer', back_populates='question')
-    types = relationship('Types', back_populates='questions')  # Изменил на 'questions'
+    types = relationship('Types', back_populates='questions')
 
     def __init__(self, text, test_id, type_id):
         self.text = text
