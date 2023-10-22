@@ -4,7 +4,6 @@ from fixtures import LoadTests
 from managers import AdminTestManager, UserTestManager
 from db import session, Test, TestsResults
 
-from bases.question_base import QuestionOptions, QuestionFewOptions, QuestionTrueFalse, QuestionUserBlank
 from project_test.Factory import QuestionFactory
 
 

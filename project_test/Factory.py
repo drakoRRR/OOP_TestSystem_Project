@@ -29,6 +29,4 @@ class QuestionFactory:
 
         return list_of_questions
 
-    def get_search(self):
-        pass
 
