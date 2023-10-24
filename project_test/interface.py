@@ -1,10 +1,11 @@
 from datetime import datetime
 
+from desgin_patterns.builder import TestBuilder, QuestionBuilder
 from fixtures import LoadTests
 from managers import AdminTestManager, UserTestManager
 from db import session, Test, TestsResults
 
-from project_test.Factory import QuestionFactory
+from desgin_patterns.Factory import QuestionFactory
 
 
 class InterFace:
@@ -74,12 +75,49 @@ class InterFace:
         else:
             print("Помилка при початку тесту")
 
+    # def menu_add_test(self):
+    #     '''Додавання тесту адміном'''
+    #
+    #     print('Яка кількість питань буде в тесті?')
+    #     num_questions = int(input("Впишіть відповідь: "))
+    #     test_data = []
+    #
+    #     for i in range(num_questions):
+    #         print()
+    #         print('1. Питання з одним правильним варіантом')
+    #         print('2. Питання з декількома правильними варіантом')
+    #         print('3. Питання з відкритою відповідь')
+    #         print('4. Питання з на Правда/Не правда')
+    #
+    #         type_question = int(input("Оберіть тип питання: "))
+    #         question_text = input(f"Впишіть текст питання {i + 1}: ")
+    #         answer_options = []
+    #
+    #         num_options = int(input("Скільки варіантів відповідей для цього питання? "))
+    #         for j in range(num_options):
+    #             option_text = input(f"Впишіть текст варіанту відповіді {j + 1}: ")
+    #             is_correct = input(f"Це правильна відповідь? (Так/Ні): ").strip().lower() == "так"
+    #             answer_options.append((option_text, is_correct))
+    #
+    #         test_data.append((question_text, answer_options, self.__types[type_question-1]))
+    #
+    #     test_name = input("Впишіть назву тесту: ")
+    #     test_description = input("Впишіть невеликий опис тесту: ")
+    #     if not AdminTestManager.test_exists(test_name):
+    #         test = AdminTestManager.create_test(test_name,
+    #                                              test_description,
+    #                                              test_data)
+    #
+    #         return test
+    #
+    #     return None
+
     def menu_add_test(self):
         '''Додавання тесту адміном'''
 
         print('Яка кількість питань буде в тесті?')
         num_questions = int(input("Впишіть відповідь: "))
-        test_data = []
+        test_builder = TestBuilder()
 
         for i in range(num_questions):
             print()
@@ -93,23 +131,20 @@ class InterFace:
             answer_options = []
 
             num_options = int(input("Скільки варіантів відповідей для цього питання? "))
+
             for j in range(num_options):
                 option_text = input(f"Впишіть текст варіанту відповіді {j + 1}: ")
                 is_correct = input(f"Це правильна відповідь? (Так/Ні): ").strip().lower() == "так"
                 answer_options.append((option_text, is_correct))
 
-            test_data.append((question_text, answer_options, self.__types[type_question-1]))
+            test_builder.add_question((question_text, answer_options, self.__types[type_question-1]))
 
         test_name = input("Впишіть назву тесту: ")
         test_description = input("Впишіть невеликий опис тесту: ")
-        if not AdminTestManager.test_exists(test_name):
-            test = AdminTestManager.create_test(test_name,
-                                                 test_description,
-                                                 test_data)
+        test = test_builder.set_name(test_name)
+        test.test_description = test_description
 
-            return test
-
-        return None
+        return test.build()
 
     @staticmethod
     def menu_check_stats():

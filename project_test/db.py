@@ -26,7 +26,7 @@ class Test(Base):
 
     questions = relationship('Question', back_populates='test')
 
-    def __init__(self, name, description):
+    def __init__(self, name=None, description=None):
         self.name = name
         self.description = description
 
