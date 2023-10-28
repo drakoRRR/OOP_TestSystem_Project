@@ -1,7 +1,6 @@
 from db import session, Test, Question, Answer, User, Types
 from datetime import datetime
 
-from project_test.bases.question_base import QuestionOptions, QuestionUserBlank, QuestionFewOptions, QuestionTrueFalse
 from project_test.bases.search_test_base import SearchTestByName, SearchTestByDescription
 
 

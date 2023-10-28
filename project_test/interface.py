@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from desgin_patterns.builder import TestBuilder, QuestionBuilder
+from desgin_patterns.builder import TestBuilder
 from fixtures import LoadTests
 from managers import AdminTestManager, UserTestManager
 from db import session, Test, TestsResults
@@ -9,19 +9,27 @@ from desgin_patterns.Factory import QuestionFactory
 
 
 class InterFace:
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.__instance:
+            cls.__instance = super(InterFace, cls).__new__(cls)
+        return cls.__instance
+
     def __init__(self):
-        '''Ініцілізатор в якому завантажуємо усі створені тести та вибір меню'''
+        if not hasattr(self, 'initialized'):
+            # Ініцілізатор в якому завантажуємо усі створені тести та вибір меню
+            LoadTests()
+            self.__choices = [
+                self.menu_test,
+                self.menu_add_test,
+                self.menu_del_test,
+                self.menu_check_stats,
+                self.menu_search_test,
+            ]
 
-        LoadTests()
-        self.__choices = [
-            self.menu_test,
-            self.menu_add_test,
-            self.menu_del_test,
-            self.menu_check_stats,
-            self.menu_search_test
-        ]
-
-        self.__types = ['options_one_correct', 'options_few_correct', 'option_blank', 'option_bool']
+            self.__types = ['options_one_correct', 'options_few_correct', 'option_blank', 'option_bool']
+            self.initialized = True
 
     def main_menu(self):
         '''Меню користувача'''
@@ -35,7 +43,8 @@ class InterFace:
         choice = int(input("Оберіть варіант: "))
         return self.__choices[choice-1]()
 
-    def menu_test(self, after_search=False, choice=None):
+    @staticmethod
+    def menu_test(after_search=False, choice=None):
         '''Проходження тесту користувачем'''
 
         if not after_search:
@@ -75,43 +84,6 @@ class InterFace:
         else:
             print("Помилка при початку тесту")
 
-    # def menu_add_test(self):
-    #     '''Додавання тесту адміном'''
-    #
-    #     print('Яка кількість питань буде в тесті?')
-    #     num_questions = int(input("Впишіть відповідь: "))
-    #     test_data = []
-    #
-    #     for i in range(num_questions):
-    #         print()
-    #         print('1. Питання з одним правильним варіантом')
-    #         print('2. Питання з декількома правильними варіантом')
-    #         print('3. Питання з відкритою відповідь')
-    #         print('4. Питання з на Правда/Не правда')
-    #
-    #         type_question = int(input("Оберіть тип питання: "))
-    #         question_text = input(f"Впишіть текст питання {i + 1}: ")
-    #         answer_options = []
-    #
-    #         num_options = int(input("Скільки варіантів відповідей для цього питання? "))
-    #         for j in range(num_options):
-    #             option_text = input(f"Впишіть текст варіанту відповіді {j + 1}: ")
-    #             is_correct = input(f"Це правильна відповідь? (Так/Ні): ").strip().lower() == "так"
-    #             answer_options.append((option_text, is_correct))
-    #
-    #         test_data.append((question_text, answer_options, self.__types[type_question-1]))
-    #
-    #     test_name = input("Впишіть назву тесту: ")
-    #     test_description = input("Впишіть невеликий опис тесту: ")
-    #     if not AdminTestManager.test_exists(test_name):
-    #         test = AdminTestManager.create_test(test_name,
-    #                                              test_description,
-    #                                              test_data)
-    #
-    #         return test
-    #
-    #     return None
-
     def menu_add_test(self):
         '''Додавання тесту адміном'''
 
@@ -142,7 +114,7 @@ class InterFace:
         test_name = input("Впишіть назву тесту: ")
         test_description = input("Впишіть невеликий опис тесту: ")
         test = test_builder.set_name(test_name)
-        test.test_description = test_description
+        test.set_description(test_description)
 
         return test.build()
 
