@@ -2,9 +2,8 @@ from project_test.bases.question_base import QuestionOptions, QuestionFewOptions
 
 
 class QuestionFactory:
-    def __init__(self, questions, search=None, user=None):
+    def __init__(self, questions, user=None):
         self.questions = questions
-        self.search = search
         self.user = user
 
         self.type_of_questions = {
