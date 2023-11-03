@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>TestingQuiz</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #303841;
+
+
+
+
+
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="search">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>50</y>
+      <width>111</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #d3d6db;
+    border: 1px solid #a8aab0; /* Толщина границы и цвет обводки */
+    color: #333; /* Цвет текста */
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+QPushButton:hover {
+    background-color: #c3c6cb; /* Цвет фона при наведении */
+    border-color: #8e91a0; /* Цвет границы при наведении */
+}
+
+QPushButton:pressed {
+    background-color: #a8aab0; /* Цвет фона при нажатии */
+    border-color: #333; /* Цвет границы при нажатии */
+    color: white; /* Цвет текста при нажатии */
+}</string>
+    </property>
+    <property name="text">
+     <string>Search</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../res-rc.qrc">
+      <normaloff>:/icons/icons/search_FILL0_wght400_GRAD0_opsz24.svg</normaloff>:/icons/icons/search_FILL0_wght400_GRAD0_opsz24.svg</iconset>
+    </property>
+   </widget>
+   <widget class="QLabel" name="logo">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>170</y>
+      <width>391</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+    font-size: 20px; /* Размер шрифта */
+    color: #333; /* Цвет текста */
+    font-weight: bold; /* Жирный шрифт */
+    text-align: center; /* Выравнивание по центру */
+    text-transform: uppercase; /* Преобразование текста в верхний регистр */
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5); /* Тень текста */
+    background-color: #f2f2f2; /* Фон для текста */
+    border: 1px solid #ccc; /* Граница вокруг текста */
+    padding: 10px;
+    border-radius: 5px;
+}</string>
+    </property>
+    <property name="text">
+     <string>                       TestQuiz</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="menu">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>290</y>
+      <width>251</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    background-color: #be3144;
+    border: 1px solid #8e1f2b; /* Толщина границы и цвет обводки */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+	transition: background-color 0.3s;
+}
+
+QPushButton:hover {
+    background-color: #d93f4b;
+    border-color: #a82c36; /* Цвет границы при наведении */
+}
+
+QPushButton:pressed {
+    background-color: #a82c36;
+    border-color: #d93f4b; /* Цвет границы при нажатии */
+}</string>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="pass_test">
+       <property name="text">
+        <string>Pass Test</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res-rc.qrc">
+         <normaloff>:/icons/icons/done_FILL0_wght400_GRAD0_opsz24.svg</normaloff>:/icons/icons/done_FILL0_wght400_GRAD0_opsz24.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="add_test">
+       <property name="text">
+        <string>Add Test</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res-rc.qrc">
+         <normaloff>:/icons/icons/add_FILL0_wght400_GRAD0_opsz24.svg</normaloff>:/icons/icons/add_FILL0_wght400_GRAD0_opsz24.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="delete_test">
+       <property name="text">
+        <string>Delete Test</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res-rc.qrc">
+         <normaloff>:/icons/icons/delete_FILL0_wght400_GRAD0_opsz24.svg</normaloff>:/icons/icons/delete_FILL0_wght400_GRAD0_opsz24.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="statistics">
+       <property name="text">
+        <string>Test Statistics</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../res-rc.qrc">
+         <normaloff>:/icons/icons/menu_FILL0_wght400_GRAD0_opsz24.svg</normaloff>:/icons/icons/menu_FILL0_wght400_GRAD0_opsz24.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../res-rc.qrc"/>
+ </resources>
+ <connections/>
+</ui>

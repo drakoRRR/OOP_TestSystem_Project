@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/add_FILL0_wght400_GRAD0_opsz24.svg</file>
+    <file>icons/delete_FILL0_wght400_GRAD0_opsz24.svg</file>
+    <file>icons/done_FILL0_wght400_GRAD0_opsz24.svg</file>
+    <file>icons/menu_FILL0_wght400_GRAD0_opsz24.svg</file>
+    <file>icons/search_FILL0_wght400_GRAD0_opsz24.svg</file>
+  </qresource>
+  <qresource prefix="logo">
+    <file>media_readme/logo/logo_testquiz.png</file>
+  </qresource>
+</RCC>
